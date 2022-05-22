@@ -1,0 +1,10 @@
+{
+  "name": "FoodApp",
+  "displayName": "FoodApp",
+  "expo": {
+    "packagerOpts": {
+      "config": "metro.config.js",
+      "sourceExts": ["js", "jsx", "json", "wasm", "svg"]
+    }
+  }
+}
