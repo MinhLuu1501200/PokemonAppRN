@@ -83,9 +83,10 @@ export default function Login({navigation}) {
             text={'Sign In'}
             // onPress={() => navigation.navigate('HomeScreen')}
             onPress={() => {
-              AsyncStorage.getItem('account').then(accounts => {
+              AsyncStorage.getItem('account').then(async accounts => {
                 // console.log('axx', accounts);
                 const listAccount = JSON.parse(accounts);
+                console.log('adas', listAccount);
                 const check = listAccount.some(
                   item =>
                     item.username === username && item.password === password,
@@ -93,7 +94,11 @@ export default function Login({navigation}) {
                 // check login dung hay sai
                 // console.log(listAccount);
                 if (check) {
-                  AsyncStorage.setItem('user', username);
+                  console.log(username);
+                  await AsyncStorage.setItem('user', JSON.stringify(username));
+                  await AsyncStorage.getItem('user').then(user => {
+                    console.log(JSON.parse(user));
+                  });
                   setUsername('');
                   setPassword('');
                   setErrorContent('');
@@ -119,7 +124,7 @@ export default function Login({navigation}) {
 const styles = StyleSheet.create({
   input: {
     backgroundColor: '#cccc',
-    width: 350,
+
     height: 50,
     marginVertical: 20,
   },

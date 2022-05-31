@@ -18,6 +18,8 @@ import MyList from '../screens/MyList';
 import ProfileStackScreen from './ProfileStackScreen';
 import Introduction from '../screens/Introduction';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import IntroScreen from '../screens/IntroScreen';
+import FoodDetail from '../screens/FoodDetail';
 
 // import FlexBox from '../screens/FlexBox';
 //NOTES: File này là settings của navigation
@@ -46,6 +48,8 @@ const Tabbar = () => {
         },
         tabBarActiveTintColor: 'tomato',
         tabBarInactiveTintColor: 'gray',
+        tabBarHideOnKeyboard: true,
+        tabBarStyle: [{display: 'flex'}, null],
         headerShown: false,
       })}>
       <Tab.Screen name="Home" component={HomeScreen} />
@@ -59,24 +63,26 @@ const Tabbar = () => {
 export default function MainNavigation() {
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName={'TabBar'}>
+      <Stack.Navigator initialRouteName={'IntroScreen'}>
         <Stack.Screen
           name="LoadingScreen"
           component={LoadingScreen}
           options={{headerShown: false}}
         />
-        {/* <Stack.Screen name="Introduction" component={LoadingScreen} /> */}
+        <Stack.Screen
+          name="IntroScreen"
+          component={IntroScreen}
+          options={{headerShown: false}}
+        />
         <Stack.Screen name="Main" component={Tabbar} />
         <Stack.Screen name="Login" component={Login} />
         <Stack.Screen name="SignUp" component={SignUp} />
+        <Stack.Screen name="FoodDetailScreen" component={FoodDetail} />
         <Stack.Screen
           name="TabBar"
           component={Tabbar}
           options={{headerShown: false}}
         />
-        {/* {authen && (
-          
-        )} */}
       </Stack.Navigator>
     </NavigationContainer>
   );

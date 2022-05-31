@@ -13,6 +13,7 @@ import MyVoucher from '../screens/MyVoucher';
 import AddCard from '../screens/AddCard';
 import PayPay from '../screens/PayPay';
 import CreditCard from '../screens/CreditCard';
+import DetailCreditCard from '../screens/DetailCreditCard';
 
 const PaymentStackScreen = () => {
   return (
@@ -40,6 +41,13 @@ const PaymentStackScreen = () => {
         component={CreditCard}
         options={{
           headerTitle: 'Add Credit Card',
+        }}
+      />
+      <Payment.Screen
+        name="Detail Card"
+        component={DetailCreditCard}
+        options={{
+          headerTitle: 'Credit Card Detail',
         }}
       />
     </Payment.Navigator>

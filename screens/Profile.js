@@ -8,7 +8,7 @@ import {
   Image,
   ScrollView,
 } from 'react-native';
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import MoreThan from '../assets/MoreThan.svg';
 import Like from '../assets/line.svg';
 import Unlike from '../assets/unline.svg';
@@ -21,7 +21,7 @@ const windowWidth = Dimensions.get('window').width;
 const itemWidth = windowWidth - 60;
 // import HamburgerItem from '../assets/hamburger-item.png';
 const food2 = require('../assets/food1.png');
-const Profile = ({navigation}) => {
+const Profile = ({route, navigation}) => {
   const [listNearMe, setListNearMe] = useState([
     {
       name: 'My Profile',
@@ -45,6 +45,26 @@ const Profile = ({navigation}) => {
       name: 'Contact At',
     },
   ]);
+  const [userInfor, setUserInfor] = useState({});
+
+  let getInforExist = () => {
+    let username = '';
+    AsyncStorage.getItem('user').then(user => {
+      console.log(JSON.parse(user));
+      username = JSON.parse(user);
+    });
+    AsyncStorage.getItem('account').then(accounts => {
+      const listAccount = JSON.parse(accounts);
+      listAccount.forEach(item => {
+        if (item.username === username) {
+          setUserInfor(item);
+        }
+      });
+    });
+  };
+  useEffect(() => {
+    getInforExist();
+  }, []);
   const ItemMenu = ({item, index}) => {
     // console.log('dsasdd', item);
     return (
@@ -89,7 +109,7 @@ const Profile = ({navigation}) => {
                     marginVertical: 6,
                     fontSize: 20,
                   }}>
-                  Itoh
+                  {userInfor.firstName}
                 </Text>
                 <Text> +84 34412312321</Text>
               </View>
@@ -107,7 +127,7 @@ const Profile = ({navigation}) => {
           colorText={styles.colorText}
           onPress={async () => {
             await AsyncStorage.removeItem('user');
-            navigation.navigate('Login');
+            navigation.replace('Login');
           }}
         />
       </View>

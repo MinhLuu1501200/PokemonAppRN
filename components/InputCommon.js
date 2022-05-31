@@ -16,6 +16,7 @@ export default function InputCommon({placeholder, customStyle, ...rest}) {
 const styles = StyleSheet.create({
   input: {
     borderRadius: 30,
+    width: 320,
     color: '#00000050',
     fontSize: 14,
     paddingHorizontal: 30,

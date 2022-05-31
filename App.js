@@ -1,3 +1,4 @@
+import 'react-native-gesture-handler';
 import {Text, View, SafeAreaView} from 'react-native';
 import React, {Component} from 'react';
 import MainNavigation from './navigation/MainNavigation';

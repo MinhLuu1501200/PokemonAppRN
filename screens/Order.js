@@ -147,12 +147,14 @@ const Order = ({navigation}) => {
           renderItem={ItemRestaurant}
           scrollEnabled={true}
           style={{paddingHorizontal: 20}}
-        />
-        <ButtonCommon
-          text="Send"
-          customStyle={styles.SignUp}
-          colorText={styles.colorText}
-          onPress={() => navigation.navigate('SignUp')}
+          ListFooterComponent={
+            <ButtonCommon
+              text="Send"
+              customStyle={styles.SignUp}
+              colorText={styles.colorText}
+              onPress={() => navigation.navigate('SignUp')}
+            />
+          }
         />
       </View>
     </>

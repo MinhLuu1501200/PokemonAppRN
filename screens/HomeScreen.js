@@ -10,7 +10,7 @@ import {
   LogBox,
 } from 'react-native';
 import {ScrollView} from 'react-native-virtualized-view';
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useRef} from 'react';
 import InputCommon from '../components/InputCommon';
 import Search from '../assets/search.svg';
 import CoffeeCup from '../assets/coffee-cup.svg';
@@ -28,57 +28,42 @@ const itemWidth = windowWidth - 60;
 // import HamburgerItem from '../assets/hamburger-item.png';
 const food2 = require('../assets/food1.png');
 import HeaderItem from '../components/HeaderItem';
-import {Snackbar} from 'react-native-paper';
-const DataMenu = [
-  {
-    id: '1',
-    title: 'Drink',
-    image: <CoffeeCup color="white" />,
-    selected: false,
-  },
-  {
-    id: '2',
-    title: 'Food',
-    image: <Burger />,
-    selected: true,
-  },
-  {
-    id: '3',
-    title: 'Cake',
-    image: <Cake />,
-    selected: false,
-  },
-  {
-    id: '4',
-    title: 'Snack',
-    image: <Potato />,
-    selected: false,
-  },
-  {
-    id: '5',
-    title: 'Fine',
-    image: <CoffeeCup />,
-    selected: false,
-  },
-];
+
 const DataFoods = [
   [{title: 'Burgers'}, {title: 'Fruit'}],
   [{title: 'Pizza'}, {title: 'Sushi'}],
   [{title: 'BBQ'}, {title: 'Noodle'}],
   [{title: 'Hotpot'}, {title: 'Noodle'}],
 ];
-const Item = ({title, image, selected}) => (
-  <>
-    <View>
-      <View style={{alignItems: 'center'}}>
-        <TouchableOpacity style={[styles.item, selected && styles.active]}>
-          <View>{image}</View>
-        </TouchableOpacity>
-        <Text style={styles.title}>{title}</Text>
+const Item = ({
+  title,
+  image,
+  selected,
+  selectedId,
+  item,
+  setDataMenu,
+  index,
+  setSelectedId,
+}) => {
+  console.log(selectedId);
+  return (
+    <>
+      <View>
+        <View style={{alignItems: 'center'}}>
+          <TouchableOpacity
+            onPress={() => {
+              setSelectedId(index);
+            }}
+            style={[styles.item, selectedId === index && styles.active]}>
+            <View>{image}</View>
+          </TouchableOpacity>
+          <Text style={styles.title}>{title}</Text>
+        </View>
       </View>
-    </View>
-  </>
-);
+    </>
+  );
+};
+
 const Foods = ({title, image}) => (
   <>
     {/* {console.log(image)} */}
@@ -131,12 +116,18 @@ const ItemRestaurant = ({item, index}) => {
   );
 };
 const HomeScreen = ({navigation}) => {
-  useEffect(() => {
-    LogBox.ignoreLogs(['VirtualizedLists should never be nested']);
-  }, []);
-  const renderItem = ({item}) => {
+  const [selectedId, setSelectedId] = useState('');
+  const renderItem = ({item, index}) => {
     return (
-      <Item title={item.title} image={item.image} selected={item.selected} />
+      <Item
+        index={index}
+        title={item.title}
+        image={item.image}
+        item={item}
+        setSelectedId={setSelectedId}
+        selectedId={selectedId}
+        setDataMenu={setDataMenu}
+      />
     );
   };
   const renderFoods = ({item}) => {
@@ -192,6 +183,38 @@ const HomeScreen = ({navigation}) => {
       star: 4,
     },
   ]);
+  let [DataMenu, setDataMenu] = useState([
+    {
+      id: '1',
+      title: 'Drink',
+      image: <CoffeeCup />,
+      selected: false,
+    },
+    {
+      id: '2',
+      title: 'Food',
+      image: <Burger />,
+      selected: true,
+    },
+    {
+      id: '3',
+      title: 'Cake',
+      image: <Cake />,
+      selected: false,
+    },
+    {
+      id: '4',
+      title: 'Snack',
+      image: <Potato />,
+      selected: false,
+    },
+    {
+      id: '5',
+      title: 'Fine',
+      image: <CoffeeCup />,
+      selected: false,
+    },
+  ]);
   return (
     <ScrollView>
       <View style={{alignItems: 'center', backgroundColor: 'white'}}>
@@ -220,6 +243,7 @@ const HomeScreen = ({navigation}) => {
           </Text>
         </View>
         <FlatList
+          showsHorizontalScrollIndicator={false}
           data={DataMenu}
           renderItem={renderItem}
           keyExtractor={item => item.id}
@@ -228,7 +252,6 @@ const HomeScreen = ({navigation}) => {
           style={{
             flexDirection: 'row',
             marginTop: 30,
-            // backgroundColor: 'red',
             height: 110,
           }}
         />
@@ -237,6 +260,7 @@ const HomeScreen = ({navigation}) => {
           data={DataFoods}
           keyExtractor={(item, index) => index.toString()}
           horizontal={true}
+          showsHorizontalScrollIndicator={false}
           style={{
             flexWrap: 'wrap',
             flexDirection: 'row',
@@ -251,7 +275,7 @@ const HomeScreen = ({navigation}) => {
               <View
                 style={{
                   flexDirection: 'column',
-                  marginLeft: index != 0 ? 20 : 0,
+                  marginLeft: index !== 0 ? 20 : 0,
                 }}>
                 <FontAwesomeIcon name="bacteria" />
                 <TouchableOpacity
@@ -260,7 +284,7 @@ const HomeScreen = ({navigation}) => {
                     borderRadius: 20,
                     paddingTop: 10,
                     paddingLeft: 15,
-                    backgroundColor: index % 2 == 0 ? lightBlue : purple,
+                    backgroundColor: index % 2 === 0 ? lightBlue : purple,
                     height: itemWidth / 3,
                     marginBottom: 20,
                     position: 'relative',
@@ -338,7 +362,7 @@ const styles = StyleSheet.create({
   search: {
     backgroundColor: '#ccc',
     height: 50,
-    width: 354,
+    width: 340,
     paddingLeft: 50,
   },
   item: {
